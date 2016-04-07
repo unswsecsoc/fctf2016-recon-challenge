@@ -10,7 +10,7 @@ int main() {
   scanf("%d", &number);
   if (number == 0x41) {
     printf("Nice work! Here's the flag: ");
-    printf("<insert flag here>");
+    printf("%s", flag);
     printf("\n");
   }
   return 0;
