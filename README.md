@@ -2,5 +2,6 @@
 Some drafts of challenges we're working on for the upcoming CTF
 
 Some initial ideas:
- * steal challenges from other CTFs???!??
+ * **DON'T**steal challenges from other CTFs!!!
+ * hide flags under every chair in the room?
 
