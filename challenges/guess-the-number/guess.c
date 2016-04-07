@@ -1,6 +1,10 @@
 #include <stdio.h>
 
 int main() {
+  FILE* filein = fopen("flag.txt", "r");
+  char flag[20];
+  fscanf(filein, "%s", flag);
+
   printf("enter a number!\n");
   int number;
   scanf("%d", &number);
