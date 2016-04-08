@@ -1,0 +1,26 @@
+
+{% extends "base.html" %}{% if somethingwrong %} {{ somethingwrong }} {% endif %} {% block content %}
+  <div class="row">
+      <div class="large-8 columns">
+          <div class="row container1">
+              {% for product in products_list %}
+              <div class="col-sm-6 col-md-3">
+                  <ul class="pricing-table">
+                      {% if product.name %}
+                      <li class="title">{{ product.name }}</li>{% endif %} {% if product.price %}
+                      <li>
+                        <span class="price-sym"><img src="{{url_for('static', filename='poke.png') }}"/></span>
+                        <span class="price">
+                          {{ product.price }}
+                        </span>
+                      </li>{% endif %} {% if product.img %}
+                      <li class="bullet-item"><img src="{{ product.img }}"/></li>{% endif %} {% if product.desc %}
+                      <li class="description">{{ product.desc }}</li>{% endif %}
+                  </ul>
+              </div>
+              {% endfor %}
+          </div>
+      </div>
+  </div>
+
+{% endblock %}

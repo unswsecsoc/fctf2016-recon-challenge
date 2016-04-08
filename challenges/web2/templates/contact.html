@@ -1,0 +1,15 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <h2>Deadlink submission</h2>
+  <form action="{{ url_for('deadlink') }}" method=post>
+    <p>If you found a broken product, submit it here and we'll check</p>
+    {{ form.hidden_tag() }}
+
+    {{ form.Link.label }}
+    {{ form.Link }}
+
+    {{ form.submit }}
+  </form>
+{% endblock %}
+
