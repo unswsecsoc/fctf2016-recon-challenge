@@ -201,7 +201,7 @@ def create_app():
                                         new_sym = currency['new_sym'])
 
     @app.route('/secretpassage')
-    @roles_required('donnyspikachuhoodie')
+    # @roles_required('donnyspikachuhoodie')
     def flag2_page():
         currency = load_currency()
         return render_template_string("""
@@ -265,18 +265,19 @@ def create_app():
             return render_template('contact.html', form=form)
 
     @app.route('/livingdead')
-    @roles_required('donnyspikachuhoodie')
+    # @roles_required('donnyspikachuhoodie')
     def livingdead_page():
         link_list = Deadlink.query.filter(Deadlink.seen == 0).all()
-        # for link in link_list:
-        #     link.seen = 1
-        #     db.session.commit()
+        for link in link_list:
+            link.seen = 1
+            db.session.commit()
         print link_list
         return render_template("livingdead.html",link_list = link_list)
 
     @app.route('/wow')
     def wow_page():
         print '[-] wow visited'
+        return 'wow'
 
 
     @app.route('/products')
