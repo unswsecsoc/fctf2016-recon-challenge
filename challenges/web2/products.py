@@ -15,7 +15,7 @@ mokepon = [ (100,u'Moké Ball',u'http://cdn.bulbagarden.net/upload/9/93/Bag_Pok%
             (50,u'Net Ball',u'http://cdn.bulbagarden.net/upload/4/4b/Bag_Net_Ball_Sprite.png',u'Great for catching fish Moképon. Also not to be used on female players'),
             (2000,u'Premier ball',u'http://cdn.bulbagarden.net/upload/5/55/Bag_Premier_Ball_Sprite.png',u'A Mokéball designed to commemorate Bob Carr'),
             (28,u'Repeat Ball',u'http://cdn.bulbagarden.net/upload/8/89/Bag_Repeat_Ball_Sprite.png',u'Just for Unowns'),
-            (300,u'Timer Ball',u'http://bulbapedia.bulbagarden.net/wiki/File:Bag_Timer_Ball_Sprite.png',u'Often used in Mokésport events. Can also be used for cooking'),
+            (300,u'Timer Ball',u'http://cdn.bulbagarden.net/upload/3/3d/Bag_Timer_Ball_Sprite.png',u'Often used in Mokésport events. Can also be used for cooking'),
             (500,u'Nest Ball',u'http://cdn.bulbagarden.net/upload/4/42/Bag_Nest_Ball_Sprite.png',u'Bird Moképon enjoy this Mokéball in the springtime'),
             (400,u'Dive Ball',u'http://cdn.bulbagarden.net/upload/f/f2/Bag_Dive_Ball_Sprite.png',u'Thousands of these litter the seabed'),
             (50000,u'Luxury Ball',u'http://cdn.bulbagarden.net/upload/8/87/Bag_Luxury_Ball_Sprite.png',u'For fancy gentlemon'),

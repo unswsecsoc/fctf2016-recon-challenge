@@ -3,16 +3,17 @@
 
 import os
 import hashlib, base64
-from flask import Flask, render_template_string, request, render_template, make_response
+import time
+from flask import Flask, render_template_string, request, render_template, make_response, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter
-from flask_user import roles_required
+from flask_user import roles_required, current_user
 from wtforms.validators import ValidationError
 
 key = 'w0wM0R3M0kep0n'
 flag1 = 'TBA' # cookie flag
 flag2 = 'TBA' # secret URL flag
-
+hostname = 'localhost:5000'
 
 def hash(string):
     m = hashlib.sha512()
@@ -57,6 +58,12 @@ def create_app():
         roles = db.relationship(Role, secondary='user_roles',
                 backref=db.backref('users', lazy='dynamic'))
 
+        def get_id(self):
+            return unicode(self.id)
+
+        def is_active(self):
+            return True
+
     # Define the UserRoles data model
     class UserRoles(db.Model):
         id = db.Column(db.Integer(), primary_key=True)
@@ -81,7 +88,7 @@ def create_app():
         user_id = db.Column(db.Integer(), db.ForeignKey('user.id', ondelete='CASCADE'))
         url = db.Column(db.UnicodeText(500), index=True)
         seen = db.Column(db.Integer(), index=True)
-        timestamp = db.Column(db.DateTime)
+        timestamp = db.Column(db.String)
 
     def my_password_validator(form, field):
         password = field.data
@@ -110,6 +117,13 @@ def create_app():
             db.session.add(dolla)
         db.session.commit()
 
+    def init_donny():
+        if not User.query.filter(User.username=='pokechampion').first():
+            donny = User(username = 'pokechampion', password = user_manager.hash_password('dontyoulovelongpasswords'))
+            donny.roles.append(Role(name='donnyspikachuhoodie'))
+            db.session.add(donny)
+            db.session.commit()
+
     def check_currency_cookie():
         result = {'new_currency': 'PKD-P-false', 'new_abbrev': 'PKD', 'new_sym': 'P'}
         if 'currency' in request.cookies:
@@ -119,10 +133,9 @@ def create_app():
                 raise
             else:
                 cream = top_layer.split('-')
-                result['new_currency'] = top_layer.encode('utf-8')
+                result['new_currency'] = top_layer.decode('utf-8')
                 result['new_abbrev'] = cream[0]
-                print cream
-                result['new_sym'] = cream[1].encode('utf-8')
+                result['new_sym'] = cream[1].decode('utf-8')
         return result
     # Create all database tables
     db.create_all()
@@ -135,7 +148,31 @@ def create_app():
 
     init_pokemon()
     init_currency()
+    init_donny()
 
+    def load_currency():
+
+        if 'currency' in request.cookies:
+            try:
+                reqcurr = check_currency_cookie()
+            except:
+                print '[-] failed to verify cookie, pls work', request.cookies['currency']
+                new_currency = 'AUD-$-false'
+                new_abbrev = 'AUD'
+                new_sym = '$'
+            else:
+                print '[-] new cookie', reqcurr
+                new_currency = reqcurr['new_currency']
+                new_abbrev = reqcurr['new_abbrev']
+                new_sym = reqcurr['new_sym']
+        else:
+                new_currency = 'AUD-$-false'
+                new_abbrev = 'AUD'
+                new_sym = '$'
+        result = {'new_currency': new_currency,
+                    'new_abbrev': new_abbrev,
+                    'new_sym': new_sym}
+        return result
 
     # user_manager.init_app(app)
 
@@ -150,6 +187,7 @@ def create_app():
     # The Home page is accessible to anyone
     @app.route('/')
     def home_page():
+        currency = load_currency()
         return render_template_string("""
             {% extends "base.html" %}
             {% block content %}
@@ -158,29 +196,32 @@ def create_app():
                 <p><a href={{ url_for('home_page') }}>Home page</a> (anyone)</p>
                 <p><a href={{ url_for('members_page') }}>Members page</a> (login required)</p>
             {% endblock %}
-            """)
+            """,                        new_currency = currency['new_currency'],
+                                        new_abbrev = currency['new_abbrev'],
+                                        new_sym = currency['new_sym'])
 
     @app.route('/secretpassage')
     @roles_required('donnyspikachuhoodie')
     def flag2_page():
+        currency = load_currency()
         return render_template_string("""
             {% extends "base.html" %}
             {% block content %}
                 <h2>Special Page</h2>
                 <p>Congratulations you managed to XSS successfully and find the secret page.</p><br/>
-                <p>{0}</p><br/>
+                <p>{flag2}</p><br/>
                 <p><a href={{ url_for('home_page') }}>Home page</a> (anyone)</p>
                 <p><a href={{ url_for('members_page') }}>Members page</a> (login required)</p>
-                <p><a href={{ url_for('special_page') }}>Special page</a> (login with username 'user007' and password 'Password1')</p>
             {% endblock %}
-
-
-            """.format(flag2))
+            """ ,                       new_currency = currency['new_currency'],
+                                        new_abbrev = currency['new_abbrev'],
+                                        new_sym = currency['new_sym'])
 
     # The Members page is only accessible to authenticated users
     @app.route('/members')
     @login_required                                 # Use of @login_required decorator
     def members_page():
+        currency = load_currency()
         return render_template_string("""
             {% extends "base.html" %}
             {% block content %}
@@ -189,23 +230,54 @@ def create_app():
                 <p><a href={{ url_for('home_page') }}>Home page</a> (anyone)</p>
                 <p><a href={{ url_for('members_page') }}>Members page</a> (login required)</p>
             {% endblock %}
-            """)
+            """,                        new_currency = currency['new_currency'],
+                                        new_abbrev = currency['new_abbrev'],
+                                        new_sym = currency['new_sym'])
 
     import forms
+
     @app.route('/deadlink', methods=['GET','POST'])
     @login_required
     def deadlink_page():
         form = forms.DeadlinkForm()
 
         if request.method == 'POST':
+            print '[-] Im really trying i promsie'
             if not request.form['Link']:
+                print '[-] i had a boo boo'
                 flash('Please provide a link', 'error')
-            else:
-                deadlink = Deadlink(user_id)
+                return render_template('contact.html', form=form)
 
-                ################################
-        else:
+            elif form.validate_on_submit():
+                thisdeadlink = Deadlink(user_id = current_user.get_id(),
+                                    url = request.form['Link'],
+                                    seen = 0,
+                                    timestamp = time.ctime())
+                db.session.add(thisdeadlink)
+                db.session.commit()
+                flash("deadlink {0} was successfully created".format(request.form['Link']))
+                return render_template('contact.html', form=form, success=True)
+            else:
+                flash('please submit a url for this website')
+                return render_template('contact.html', form=form, error=True)
+
+        elif request.method == 'GET':
             return render_template('contact.html', form=form)
+
+    @app.route('/livingdead')
+    @roles_required('donnyspikachuhoodie')
+    def livingdead_page():
+        link_list = Deadlink.query.filter(Deadlink.seen == 0).all()
+        # for link in link_list:
+        #     link.seen = 1
+        #     db.session.commit()
+        print link_list
+        return render_template("livingdead.html",link_list = link_list)
+
+    @app.route('/wow')
+    def wow_page():
+        print '[-] wow visited'
+
 
     @app.route('/products')
     def products_page():

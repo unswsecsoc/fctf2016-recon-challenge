@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>MyApp</title>
+    <title>Pokéball Store</title>
 
     <!-- Bootstrap -->
     <link href="//netdna.bootstrapcdn.com/bootstrap/3.1.1/css/bootstrap.min.css" rel="stylesheet">
@@ -47,10 +47,16 @@
                 &nbsp; | &nbsp;  <a href="{{url_for('products_page') }}">Products</a>
             {% if call_or_get(current_user.is_authenticated) %}
                 &nbsp; | &nbsp; <a href="{{ url_for('user.profile') }}">User profile</a>
+                &nbsp; | &nbsp; <a href="{{ url_for('deadlink_page') }}">Submit Deadlinks</a>
             {% endif %}
         <!-- </div> -->
+
+            <div class= "nav pull-right">
+            <span>Today's Poké Conversion Rate: 100 <img src="{{ url_for('static',filename='poke.png') }}"/> = </span>
+            <span class="price">100</span><span class="price-sym"><img src=" {{ url_for('static', filename='poke.png') }} "/></span>
+            </div>
         {% if request.url_rule.endpoint == "products_page" %}
-        <div class="nav pull-right">
+         <div class="nav pull-right">
             <li class='currency-menu'>
               <form accept-charset="UTF-8" action="" id="currency_select_form" method="get">
                   <div style="margin:0;padding:0;display:inline">
@@ -66,7 +72,7 @@
                           <a href='javascript:void(0);' class="currency_selected" name="{{currency.abbrev}}-{{currency.sym}}-false">
                               <span id="currency_select_list" >
                             {% autoescape false %}
-                                <!-- {{currency.sym}} -->
+                                {{currency.sym}}
                             {% endautoescape %}
                                 {{currency.abbrev}}
                             </span>
@@ -77,9 +83,9 @@
                   </ul>
               </form>
             </li>
-            <script src="{{url_for('static', filename='pokedollar.py')}}"/></script>
         </div>
-    {% endif %}
+        {% endif %}
+            <script src="{{url_for('static', filename='pokedollar.py')}}"/></script>
     </div>
     {% endblock %}
     <hr class="no-margins"/>
