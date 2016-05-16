@@ -2,18 +2,28 @@
 # -*- coding: utf-8 -*-
 
 import os
-import hashlib, base64
+import hashlib
+import base64
 import time
 from flask import Flask, render_template_string, request, render_template, make_response, flash
 from flask_sqlalchemy import SQLAlchemy
 from flask_user import login_required, UserManager, UserMixin, SQLAlchemyAdapter
-from flask_user import roles_required, current_user
+from flask_user import roles_required, current_user, forms
+import myforms
 from wtforms.validators import ValidationError
 
 key = 'w0wM0R3M0kep0n'
-flag1 = 'TBA' # cookie flag
-flag2 = 'TBA' # secret URL flag
 hostname = 'localhost:5000'
+
+def load_flags():
+    print '[+] Loading flags from files'
+    global flag1
+    with open('flag1.txt') as f:
+        flag1 = f.read().strip()
+
+    global flag2
+    with open('flag2.txt') as f:
+        flag2 = f.read().strip()
 
 def hash(string):
     m = hashlib.sha512()
@@ -23,12 +33,12 @@ def hash(string):
 
 class ConfigClass(object):
     # Flask settings
-    SECRET_KEY =              os.getenv('SECRET_KEY',       'THIS IS AN INSECURE SECRET')
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL',     'sqlite:///basic_app.sqlite')
-    SQLALCHEMY_ECHO             = True
-    USER_ENABLE_EMAIL           = False
-    USER_ENABLE_CONFIRM_EMAIL   = False
-    USER_ENABLE_FORGOT_PASSWORD = False
+    SECRET_KEY                      = os.getenv('SECRET_KEY',       'THIS IS AN INSECURE SECRET')
+    SQLALCHEMY_DATABASE_URI         = os.getenv('DATABASE_URL',     'sqlite:///basic_app.sqlite')
+    SQLALCHEMY_ECHO                 = True
+    USER_ENABLE_EMAIL               = False
+    USER_ENABLE_CONFIRM_EMAIL       = False
+    USER_ENABLE_FORGOT_PASSWORD     = False
     USER_ENABLE_LOGIN_WITHOUT_CONFIRM = True
     USER_AUTO_LOGIN                  = True
     USER_AUTO_LOGIN_AFTER_CONFIRM    = USER_AUTO_LOGIN
@@ -174,17 +184,6 @@ def create_app():
                     'new_sym': new_sym}
         return result
 
-    # user_manager.init_app(app)
-
-    # # Create 'user007' user with 'secret' and 'agent' roles
-    # if not User.query.filter(User.username=='user007').first():
-    #     user1 = User(username='user007', email='user007@example.com', active=True,
-    #             password=user_manager.hash_password('asdf'))
-    #     user1.roles.append(Role(name='secret'))
-    #     user1.roles.append(Role(name='agent'))
-    #     db.session.add(user1)
-    #     db.session.commit()
-    # The Home page is accessible to anyone
     @app.route('/')
     def home_page():
         currency = load_currency()
@@ -201,10 +200,10 @@ def create_app():
                                         new_sym = currency['new_sym'])
 
     @app.route('/secretpassage')
-    # @roles_required('donnyspikachuhoodie')
+    @roles_required('donnyspikachuhoodie')
     def flag2_page():
         currency = load_currency()
-        return render_template_string("""
+        resp = make_response(render_template_string("""
             {% extends "base.html" %}
             {% block content %}
                 <h2>Special Page</h2>
@@ -215,9 +214,24 @@ def create_app():
             {% endblock %}
             """ ,                       new_currency = currency['new_currency'],
                                         new_abbrev = currency['new_abbrev'],
-                                        new_sym = currency['new_sym'])
+                                        new_sym = currency['new_sym']))
+        resp.set_cookie("totally_not_the_first_flag", flag1)
+        return resp
 
     # The Members page is only accessible to authenticated users
+    @app.route('/create_user')
+    def user_create():
+        currency = load_currency()
+        if 'username' not in request.args:
+            flash('Please include a username');
+            return render_template('flask_user/register.html', form=forms.RegisterForm, error=True)
+        if 'password' not in request.args:
+            flash('Please include a username');
+            return render_template('flask_user/register.html', form=forms.RegisterForm, error=True)
+        if request.args.get('retype_password') != request.args.get('password'):
+            flash('Please include a password');
+            return render_template('flask_user/register.html', form=forms.RegisterForm, error=True)
+
     @app.route('/members')
     @login_required                                 # Use of @login_required decorator
     def members_page():
@@ -234,7 +248,6 @@ def create_app():
                                         new_abbrev = currency['new_abbrev'],
                                         new_sym = currency['new_sym'])
 
-    import forms
 
     @app.route('/deadlink', methods=['GET','POST'])
     @login_required
@@ -265,19 +278,26 @@ def create_app():
             return render_template('contact.html', form=form)
 
     @app.route('/livingdead')
-    # @roles_required('donnyspikachuhoodie')
+    @roles_required('donnyspikachuhoodie')
     def livingdead_page():
-        link_list = Deadlink.query.filter(Deadlink.seen == 0).all()
-        for link in link_list:
-            link.seen = 1
-            db.session.commit()
+        link_list = Deadlink.query.filter(Deadlink.seen == 0).limit(1).all()
+        # for link in link_list:
+        #     link.seen = 1
+        #     db.session.commit()
         print link_list
         return render_template("livingdead.html",link_list = link_list)
 
     @app.route('/wow')
     def wow_page():
         print '[-] wow visited'
-        return 'wow'
+        return render_template_string("""
+            {% extends "base.html" %}
+            {% block content %}
+                <p>wow</p>
+            {% endblock %}
+            """,                        new_currency = currency['new_currency'],
+                                        new_abbrev = currency['new_abbrev'],
+                                        new_sym = currency['new_sym'])
 
 
     @app.route('/products')
@@ -325,13 +345,9 @@ def create_app():
                                     new_currency = 'PKD-P-false',
                                     new_abbrev = 'PKD',
                                     new_sym = 'P')
-
-
-
-
     return app
 
-
 if __name__ == "__main__":
+    load_flags()
     app = create_app()
     app.run(host='0.0.0.0', port=5000, debug=True)

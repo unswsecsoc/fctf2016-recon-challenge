@@ -13,5 +13,5 @@ currsym = [['AUD','$'],
 ['KRW',u'₩'],
 ['NZD',u'$'],
 ['RUB',u'руб'],
-['PKD',u'<img src="{{ url_for(\'static\',filename=\'poke.png\') }}"/>'],
+['PKD',u'<img src="./static/poke.png"/>'],
 ['USD',u'$']]

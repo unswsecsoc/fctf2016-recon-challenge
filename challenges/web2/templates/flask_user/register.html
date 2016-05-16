@@ -4,8 +4,7 @@
 {% from "flask_user/_macros.html" import render_field, render_submit_field %}
 <h1>{%trans%}Register{%endtrans%}</h1>
 
-<form action="" method="POST" novalidate formnovalidate class="form" role="form">
-    {{ form.hidden_tag() }}
+<form action="/create_user" method="GET" novalidate formnovalidate class="form" role="form">
 
     {# Username or Email #}
     {% set field = form.username if user_manager.enable_username else form.email %}

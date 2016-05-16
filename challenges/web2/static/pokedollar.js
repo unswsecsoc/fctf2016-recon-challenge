@@ -11,9 +11,12 @@ function convert(val, a, b){
 }
 
 function changeEverything(old_currency, old_sym, new_currency, new_sym, first_time) {
+    var i = 0;
     $(".price").each(function() {
         var newprice = convert(pokeToAussie($(this).text()), 'AUD', new_currency);
-        $(this).parent().find(".price-sym").first().html(new_sym);
+        if (i == 0) {
+        $(this).parent().find(".price-sym").first().html(new_sym);i = 1;} else {
+        $(this).parent().find(".price-sym").first().text(new_sym);}
         $(this).text(Math.round(newprice * 100) / 100);
     });
 }

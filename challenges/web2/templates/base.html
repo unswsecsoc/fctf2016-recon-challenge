@@ -44,7 +44,7 @@
     <div id="menu-div" class="with-margins">
         <!-- <div class="pull-left"> -->
             <a href="/">Home</a>
-                &nbsp; | &nbsp;  <a href="{{url_for('products_page') }}">Products</a>
+                &nbsp; | &nbsp;  <a href="{{ url_for('products_page') }}">Products</a>
             {% if call_or_get(current_user.is_authenticated) %}
                 &nbsp; | &nbsp; <a href="{{ url_for('user.profile') }}">User profile</a>
                 &nbsp; | &nbsp; <a href="{{ url_for('deadlink_page') }}">Submit Deadlinks</a>
