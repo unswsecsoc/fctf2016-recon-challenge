@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+{% if success %}
+    <p>Thank you for your message. We'll get back to you shortly.</p>
+
+{% endif %}
+  <h2>Deadlink submission</h2>
+  <form action="{{ url_for('deadlink_page') }}" method=post>
+    <fieldset class="form-group">
+    <p>If you found a broken product, submit it here and we'll check</p>
+    {{ form.hidden_tag() }}
+
+    <label>{{ form.Link.label(class_="") }}</label>
+    {{ form.Link(class_="form-control") }}
+
+    </fieldset>
+    {{ form.submit(class_="btn btn-primary") }}
+  </form>
+{% endblock %}
+

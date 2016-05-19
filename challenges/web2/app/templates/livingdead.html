@@ -1,0 +1,13 @@
+<html>
+    <head>
+        <title>deadlink</title>
+    </head>
+    <body>
+
+
+          {% for link in link_list %}
+
+            <a href="{{ link.url }}"> {{ link.url }}</a>
+          {% endfor %}
+    </body>
+</html>
