@@ -10,9 +10,9 @@
 .dropdown-menu {
     position: absolute;
     top: 100%;
-    left: -150%;
     z-index: 1000;
     display: none;
+    transform: translateX(-1em);
     float: left;
     min-width: 160px;
     padding: 5px 0;
@@ -25,7 +25,8 @@
     border-radius: 4px;
     -webkit-box-shadow: 0 6px 12px rgba(0,0,0,0.175);
     box-shadow: 0 6px 12px rgba(0,0,0,0.175);
-    background-clip: padding-box
+    background-clip: padding-box;
+    left: auto;
 }
 
 .dropdown-menu.pull-right {
@@ -73,4 +74,37 @@
     background-color: transparent;
     background-image: none;
     filter: progid:DXImageTransform.Microsoft.gradient(enabled=false)
+}
+.card-deck-wrapper {
+    margin-left: -0.25em;
+    margin-right: -0.25em;
+}
+.card-deck {
+    border-spacing: 0.25em 0.25em;
+}
+.no-padding {
+    padding:0 !important;
+}
+#main-div {
+    padding-top: 1em;
+}
+
+.header-div {
+    position: relative;
+}
+
+.user-state {
+    position: absolute;
+    top: 50%;
+    transform: translateY(-50%);
+    right: 1em;
+}
+.currency-dropdown-nav {
+    padding-right: 1em;
+}
+.mokeball-img {
+    height: 100px;
+    margin: 0 auto;
+    display: block;
+    padding-top: 10px;
 }

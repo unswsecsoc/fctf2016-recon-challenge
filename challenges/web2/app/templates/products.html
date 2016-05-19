@@ -1,26 +1,31 @@
 
 {% extends "base.html" %}{% if somethingwrong %} {{ somethingwrong }} {% endif %} {% block content %}
-  <div class="row">
-      <div class="large-8 columns">
-          <div class="row container1">
-              {% for product in products_list %}
-              <div class="col-sm-6 col-md-3">
-                  <ul class="pricing-table">
-                      {% if product.name %}
-                      <li class="title">{{ product.name }}</li>{% endif %} {% if product.price %}
-                      <li>
-                        <span class="price-sym"><img src="{{url_for('static', filename='poke.png') }}"/></span>
-                        <span class="price">
-                          {{ product.price }}
-                        </span>
-                      </li>{% endif %} {% if product.img %}
-                      <li class="bullet-item"><img src="{{ product.img }}"/></li>{% endif %} {% if product.desc %}
-                      <li class="description">{{ product.desc }}</li>{% endif %}
-                  </ul>
-              </div>
-              {% endfor %}
-          </div>
-      </div>
-  </div>
+    <div class="card-deck-wrapper">
+            <div class="card-columns">
+                {% for product in products_list %}
+                <!--  <div class="col-sm-3 no-padding"> -->
+                <div class="card productbox">
+                    {% if product.img %}
+                    <img class="card-img-top mokeball-img" alt="{{ product.name }}" data-src="{{ product.img }}" src="{{ product.img }}"/>
+                    {% endif %} 
+                    <div class="card-block">
+                        {% if product.name %}
+                        <h4 class="card-title">{{ product.name }}</h4>
+                        {% endif %}
+                        <p class="card-text">
+                        {% if product.price %}
+                            <span class="price-sym card-text"><img src="{{url_for('static', filename='poke.png') }}"/></span>
+                            <span class="price card-text">{{ product.price }}</span>
+                        {% endif %}
+                        </p>
+                        <p class="card-text">
+                        {% if product.desc %}{{ product.desc }}{% endif %}
+                        </p>
+                    </div>
+                </div>
+                <!-- </div> -->
+                {% endfor %}
+            </div>
+    </div>
 
 {% endblock %}

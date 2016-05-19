@@ -1,5 +1,6 @@
 import os
 import time
+import base64
 from flask import render_template_string
 from flask import request
 from flask import render_template
@@ -14,10 +15,12 @@ from app import myforms
 from app import app
 from app import custom
 from app import db
-from app.models import User
+from app.models import *
+from app.custom import hash
 from app.main import flag1
 from app.main import flag2
 from app.main import flag3
+
 
 @app.route('/')
 def home_page():
@@ -94,7 +97,6 @@ def members_page():
 
 
 @app.route('/deadlink', methods=['GET','POST'])
-@login_required
 def deadlink_page():
     form = myforms.DeadlinkForm()
 
@@ -106,7 +108,12 @@ def deadlink_page():
             return render_template('contact.html', form=form)
 
         elif form.validate_on_submit():
-            thisdeadlink = Deadlink(user_id = current_user.get_id(),
+            user_id = -1
+            try:
+               user_id = current_user.get_id() 
+            except: 
+                pass
+            thisdeadlink = Deadlink(user_id = user_id,
                                 url = request.form['Link'],
                                 seen = 0,
                                 timestamp = time.ctime())
@@ -145,6 +152,7 @@ def wow_page():
 
 
 @app.route('/products')
+@login_required
 def products_page():
     products_list = Product.query.all()
     currency_list = Currency.query.all()

@@ -1,6 +1,7 @@
 from flask import Flask
 from flask import request
 from app import db
+from app import key
 import base64
 import hashlib
 

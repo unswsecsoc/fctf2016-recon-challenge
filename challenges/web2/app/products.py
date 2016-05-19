@@ -3,7 +3,7 @@
 mokepon = [ (100,u'Moké Ball',u'http://cdn.bulbagarden.net/upload/9/93/Bag_Pok%C3%A9_Ball_Sprite.png',u'Allows the player to catch wild Moképon.'),
             (600,u'Gr8 Ball',u' http://cdn.bulbagarden.net/upload/c/ca/Bag_Great_Ball_Sprite.png',u'Allows the player to catch wild Moképon with a higher catch rate than a Moké Ball'),
             (1200,u'Ultra Ball',u' http://cdn.bulbagarden.net/upload/0/03/Bag_Ultra_Ball_Sprite.png',u' Allows the player to catch wild Moképon with a higher catch rate than a Gr8 Ball'),
-            (2000000,u'Master-sama Ball',u' http://cdn.bulbagarden.net/upload/6/6d/Bag_Master_Ball_Sprite.png',u'You could be the shittest player and still catch ANY Moképon with this ball'),
+            (2000000,u'McDonald\'s Ball',u' http://cdn.bulbagarden.net/upload/6/6d/Bag_Master_Ball_Sprite.png',u'You could be the shittest player and still catch ANY Moképon with this ball. Tastes like Big Mac Sauce'),
             (1000,u'Safari ball',u'http://cdn.bulbagarden.net/upload/e/eb/Bag_Safari_Ball_Sprite.png',u'A Mokéball to admire in the wild'),
             (500,u'Level Ball',u'http://cdn.bulbagarden.net/upload/d/df/Bag_Level_Ball_Sprite.png',u'For shitty players bored of training their Moképon'),
             (500,u'Lure Ball',u'http://cdn.bulbagarden.net/upload/2/25/Bag_Lure_Ball_Sprite.png',u'Lures all wild Moképon to you*. *Legendaries not included'),
